@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -21,7 +22,7 @@ var upload = multer({
 mongoose.set("debug", true);
 mongoose
   .connect(
-    "mongodb+srv://fred:123@cluster0-c0yx2.mongodb.net/dymatrip?retryWrites=true&w=majority",
+    `${process.env.DB_CONN}`,
     {
       useNewUrlParser: true
     }
@@ -110,11 +111,11 @@ app.get(
 // upload activity image
 app.post("/api/activity/image", upload.single("activity"), (req, res, next) => {
   try {
-    const publicPath = `http://localhost/public/assets/images/activities/${req.file.originalname}`;
+    const publicPath = `${process.env.BASEURL}/public/assets/images/activities/${req.file.originalname}`;
     res.json(publicPath || "error");
   } catch (e) {
     next(e);
   }
 });
 
-app.listen(80);
+app.listen(3000);
